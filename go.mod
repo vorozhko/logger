@@ -1,3 +1,3 @@
-module vorozhko/logger-interface
+module vorozhko/logger
 
 go 1.20

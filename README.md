@@ -48,6 +48,57 @@ func main() {
 }
 ```
 
+## Unit Tests
+
+The package includes unit tests to ensure the correctness of the logger's functionality. The tests cover:
+- Logging messages with different severity levels.
+- Verifying the output format and destination.
+- Handling of context metadata.
+
+### Running Tests
+
+To run the unit tests, use the following command:
+
+```bash
+go test ./...
+```
+
+Example output:
+```
+ok  	github.com/vorozhko/logger	0.005s
+```
+
+### Adding Your Own Tests
+
+You can add your own tests by creating new test files (e.g., `logger_test.go`) and using Go's `testing` package. Here's an example test:
+
+```go
+package logger
+
+import (
+    "bytes"
+    "context"
+    "testing"
+)
+
+func TestLogger_Info(t *testing.T) {
+    var buf bytes.Buffer
+    logger := NewLogger(&buf)
+
+    ctx := context.WithValue(context.Background(), RequestIDKey, "12345")
+    err := logger.Info(ctx, "Test info message", map[string]interface{}{"key": "value"})
+
+    if err != nil {
+        t.Fatalf("Expected no error, got %v", err)
+    }
+
+    expected := "INFO: Test info message key=value requestID=12345"
+    if buf.String() != expected+"\n" {
+        t.Errorf("Expected '%s', got '%s'", expected, buf.String())
+    }
+}
+```
+
 ## Installation
 
 Clone the repository:
